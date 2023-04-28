@@ -1,0 +1,20 @@
+fr:
+  activerecord:
+    models:
+      plage_ouverture: Plage d'ouverture
+    attributes:
+      plage_ouverture:
+        title: Description
+        first_day: Premier jour
+        start_time: Commence à
+        end_time: Termine à
+        recurrence: Répéter
+        lieu: Lieu
+    errors:
+      models:
+        plage_ouverture:
+          attributes:
+            end_time:
+              must_be_after_start_time: "doit être après l’heure de début."
+            lieu:
+              must_be_enabled: "doit être ouvert."

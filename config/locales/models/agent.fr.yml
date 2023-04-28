@@ -1,0 +1,34 @@
+fr:
+  activerecord:
+    models:
+      agent: Agent
+    attributes:
+      agent:
+        role: Rôle
+        rdvs: Rendez-vous
+        service: Service
+        rdv_notifications_level: Notifications de RDV
+        display_saturdays: Affichage des samedis sur le calendrier
+        display_cancelled_rdv: Affichage des rendez-vous annulés
+      agent_territorial_access_right:
+        allow_to_manage_teams: Autorisé à créer, supprimer, modifier des équipes
+        allow_to_manage_access_rights: Autorisé à gérer les droits d'accès
+        allow_to_invite_agents: Autorisé à inviter et affecter des agents sur des organisations
+        allow_to_download_metrics: Autorisé à télécharger les rendez-vous par usager sur plusieurs organisations
+      agent/rdv_notifications_levels:
+        all: À chaque modification
+        others: Uniquement les modifications faites par un usager (ou par un autre agent)
+        soon: Uniquement les modifications (faites par un usager ou un autre agent) moins de 24 heures à l’avance
+        none: Jamais
+      agent/plage_ouverture_notification_levels:
+        all: À chaque modification
+        none: Jamais
+      agent/absence_notification_levels:
+        all: À chaque modification
+        none: Jamais
+      agent/display_cancelled_rdvs:
+        true: "Afficher les RDV annulés"
+        false: "Ne pas afficher les RDV annulés"
+      agent/display_saturdays:
+        true: "Afficher les samedis"
+        false: "Ne pas afficher les samedis"

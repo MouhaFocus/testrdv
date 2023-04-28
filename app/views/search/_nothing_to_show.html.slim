@@ -1,0 +1,18 @@
+/ TODO redirect to this page directly from controler
+.card
+  .card-body
+    - if context.follow_up?
+      - if context.referents.empty?
+        .font-weight-bold L'agent avec qui vous voulez prendre rendez-vous ne vous est pas assigné comme référent.
+      - else
+        .font-weight-bold Votre référent n'a pas de créneaux disponibles.
+    - elsif context.invitation?
+      .font-weight-bold Un problème semble s'être produit pour votre invitation. Toutes nos excuses pour cela.
+      = mail_to SUPPORT_EMAIL,
+        subject: "[Problème Invitation]",
+        class: "btn btn-primary" do
+        span>
+          i.fa.fa-envelope
+        | Envoyer une demande à l'équipe technique
+    - else
+      .font-weight-bold La prise de rendez-vous n'est pas disponible pour ce département.

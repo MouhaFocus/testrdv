@@ -1,0 +1,86 @@
+fr:
+  mailers:
+    common:
+      hello: Bonjour,
+      farewell_html: "<p>À bientôt,<br>L’équipe %{domain_name}</p>"
+  agents:
+    waiting_room_mailer:
+      title: Un usager en salle d'attente
+      user_in_waiting_room:
+        description:
+          zero: "votre rdv va bientôt démarrer"
+          one: "%{users_name} vous attend pour son RDV"
+          other: "%{users_name} vous attendent pour leur RDV"
+    absence_mailer:
+      absence_created:
+        title: "%{domain_name} - Indisponibilité créée - %{title}"
+        description_1: Vous venez de créer une indisponibilité sur votre planning.
+        description_2: Vous pouvez synchroniser cette indisponibilité sur votre calendrier en ouvrant la pièce jointe de cet email.
+      absence_updated:
+        title: "%{domain_name} - Indisponibilité modifiée - %{title}"
+        description_1: Une de vos indisponibilités a été modifiée.
+        description_2: Vous pouvez synchroniser cette indisponibilité sur votre calendrier en ouvrant la pièce jointe de cet email.
+      absence_destroyed:
+        title: "%{domain_name} - Indisponibilité supprimée - %{title}"
+        description_1: Une de vos indisponibilités a été supprimée.
+        description_2: Vous pouvez supprimer l’évènement correspondant de votre logiciel de calendrier en ouvrant la pièce jointe de cet email.
+    plage_ouverture_mailer:
+      plage_ouverture_created:
+        title: "%{domain_name} - Plage d’ouverture créée - %{title}"
+        description_1: Vous venez de créer une plage d’ouverture sur votre planning.
+        description_2: Vous pouvez synchroniser l’évènement sur votre logiciel de calendrier en ouvrant la pièce jointe de cet email.
+      plage_ouverture_updated:
+        title: "%{domain_name} - Plage d’ouverture modifiée - %{title}"
+        description_1: Une de vos plages d’ouvertures a été modifiée.
+        description_2: Vous pouvez synchroniser l’évènement sur votre logiciel de calendrier en ouvrant la pièce jointe de cet email.
+      plage_ouverture_destroyed:
+        title: "%{domain_name} - Plage d’ouverture supprimée - %{title}"
+        description_1: Une de vos plages d’ouvertures a été supprimée.
+        description_2: Vous pouvez supprimer l’évènement de votre logiciel de calendrier en ouvrant la pièce jointe de cet email.
+    rdv_mailer:
+      rdv_created:
+        title: Nouveau RDV ajouté sur votre agenda %{domain_name} pour %{date}
+        title_participation: Nouvelle participation au RDV collectif sur votre agenda %{domain_name} pour %{date}
+        created_at_date_by_user: Un nouveau RDV qui aura lieu %{date} vient d’être ajouté à votre agenda.
+        created_participation_at_date_by_user: La participation de %{author} au RDV collectif qui aura lieu %{date} vient d’être ajoutée.
+      rdv_updated:
+        title: RDV du %{date} modifié
+      rdv_cancelled:
+        title: RDV annulé %{date}
+        title_participation: Participation au RDV collectif annulée %{date}
+        revoked_at_date_by_agent: Un RDV qui devait avoir lieu %{date} vient d’être annulé par %{author} pour raison administrative.
+        cancelled_at_date_by_agent: Un RDV qui devait avoir lieu %{date} vient d’être annulé par %{author} à la demande de l’usager.
+        cancelled_at_date_by_user: Un RDV qui devait avoir lieu %{date} vient d’être annulé par l’usager %{author}.
+        cancelled_participation_at_date_by_user: La participation au RDV collectif %{date} vient d’être annulé par l’usager %{author}.
+    reply_transfer_mailer:
+      notify_agent_of_user_reply:
+        title: Message d'usager⋅e au sujet de votre RDV %{date}
+        intro: "Dans le cadre du RDV du %{date}, l'usager⋅e %{author} a envoyé la réponse suivante par e-mail :"
+        instructions: Merci de ne pas répondre à cet e-mail. Vous pouvez contacter l'usager⋅e à l'aide des informations inclues dans le RDV.
+      forward_to_default_mailbox:
+        title: Message d'usager⋅e en réponse à un e-mail de notification
+        intro: "L'usager⋅e %{author} a répondu à un e-mail de notification :"
+        instructions: Merci de ne pas répondre à cet e-mail.
+      shared:
+        attachments: Le mail de l'usager⋅e avait en pièce jointe "%{attachment_names}". Il nous est impossible de vous transmettre ce fichier. Vous pouvez contacter l'usager⋅e pour qu'iel l'envoie à votre adresse.
+  users:
+    file_attente_mailer:
+      new_creneau_available:
+        title: Un créneau vient de se liberer !
+    rdv_mailer:
+      rdv_created:
+        title: RDV confirmé le %{date}
+      rdv_updated:
+        title: RDV du %{date} modifié
+      rdv_upcoming_reminder:
+        title: "[Rappel] RDV le %{date}"
+      rdv_cancelled:
+        title: RDV annulé le %{date} avec %{organisation}
+        revoked_for_motif_at_date: Votre RDV %{motif} du %{date} a été annulé pour raison administrative.
+        cancelled_for_motif_at_date: Votre RDV %{motif} du %{date} a bien été annulé à votre demande.
+        reschedule_by_phone: Vous pouvez reprendre un rendez-vous en appelant au %{telephone_link}.
+        reschedule_online: 'Vous pouvez reprendre un rendez-vous en cliquant sur le lien ci-dessous :'
+        reschedule_button: Reprendre RDV
+  prescripteurs_mailer:
+    rdv_created:
+      title: RDV confirmé le %{date}

@@ -1,0 +1,7 @@
+<% creneaux_html = render 'creneaux', rdv: @rdv, creneaux: @creneaux, date_range: @date_range %>
+(function(){
+  let element = document.querySelector("#creneaux-lieu");
+  if(element) {
+    element.innerHTML = "<%= escape_javascript creneaux_html %>";
+  }
+})();

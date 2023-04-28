@@ -1,0 +1,152 @@
+- content_for(:menu_item) { "menu-users" }
+
+- content_for :title do
+  | #{@user.full_name}
+
+- content_for :breadcrumb do
+  ol.breadcrumb.mr-2.d-inline-flex
+    li.breadcrumb-item
+      = link_to "Vos usagers", admin_organisation_users_path(current_organisation)
+    - if @user.relative?
+      li.breadcrumb-item
+        = link_to @user.responsible.full_name, admin_organisation_user_path(current_organisation, @user.responsible)
+    li.breadcrumb-item.active #{@user.full_name}
+
+  = link_to t(".find_rdv"), admin_organisation_agent_searches_path(current_organisation, user_ids: [@user.id]), class: "btn btn-outline-primary"
+
+.row
+  .col-md-6
+    .card#spec-primary-user-card
+      .card-body
+        - if @user.invitable?
+          .row.bg-info.text-white.p-2.mb-3
+            .col-md-8
+              | Cet usager ne s'est pas encore créé de compte #{current_domain.name}.
+              - if @user.invitation_sent_at
+                p.small.m-0 Invitation envoyée il y a #{distance_of_time_in_words_to_now(@user.invitation_sent_at)}
+            .col-md-4.text-right
+              = link_to "Inviter", invite_admin_organisation_user_path(current_organisation, @user), method: :post, class: "btn btn-outline-white"
+
+        - if @user.invited_through == "external" && @user.invitation_accepted_at.nil?
+          .row.bg-info.text-white.p-2.mb-3
+            .col-md-8
+              | Cet usager a reçu une invitation via un partenaire de #{current_domain.name}, mais il ne l’a pas encore acceptée.
+
+        - if @user.logged_once_with_franceconnect?
+          .row.bg-info.text-white.p-2.mb-3 Cet usager s'est déjà connecté via FranceConnect.
+
+        - if @user.responsible?
+          h2.card-title.mb-3 Informations générales
+          = render "responsible_information", user: @user
+
+        - else
+          h2.card-title.mb-3 Informations de votre proche
+          ul.list-unstyled
+            li= object_attribute_tag(@user, :first_name)
+            li= object_attribute_tag(@user, :last_name)
+            li= object_attribute_tag(@user, :birth_date, birth_date_and_age(@user))
+            - if current_territory.enable_notes_field?
+              li= object_attribute_tag(@user, :notes, formatted_user_notes(@user))
+
+        .row.mt-3
+          .col.text-left
+            - if @user.can_be_soft_deleted_from_organisation?(current_organisation)
+              = link_to "Supprimer", admin_organisation_user_path(current_organisation, @user), method: :delete, class: "btn btn-outline-danger", data: { confirm: user_soft_delete_confirm_message(@user)}
+            - else
+              = link_to "Supprimer", "#", class: "btn btn-outline-danger", onclick: "alert(this.dataset.message)", data: { message: I18n.t("users.can_not_delete_because_has_future_rdvs") }
+          .col.text-right
+            = link_to "Modifier", edit_admin_organisation_user_path(current_organisation, @user), class: "btn btn-primary"
+
+    - if @user.responsible?
+      .card
+        .card-header(id="agents-referents") Agents référents
+        .card-body
+          ul.list-unstyled.mb-2
+            - @referent_assignations.each do |referent_assignation|
+              - if policy([:agent, referent_assignation]).show?
+                li.mb-2 = referent_assignation.agent.full_name_and_service
+            - if @referent_assignations.empty?
+              li.font-italic Aucun référent
+
+          .text-right
+            = link_to "Modifier", admin_organisation_user_referent_assignations_path(current_organisation, @user), class: "btn btn-outline-primary"
+
+    - if @user.relative?
+      .card#spec-secondary-user-card
+        .card-body
+          h2.card-title.mb-3 Informations sur l'usager en charge
+          = render "admin/users/responsible_information", user: @user.responsible
+          .text-right
+            = link_to "Voir", admin_organisation_user_path(current_organisation, @user.responsible), class: "btn btn-outline-primary"
+
+      .card
+        .card-header Agents référents du responsable
+        .card-body
+          ul.list-unstyled.mb-2
+            - @user.responsible.agents.includes([:service]).each do |agent|
+              li.mb-2
+              | #{agent.full_name_and_service}
+            - if @user.responsible.agents.empty?
+              li.mb-2
+                .font-italic Aucun référent
+
+    - if @user.responsible?
+      .card
+        .card-header Proches
+        .card-body
+          ul.list-unstyled.mb-2
+            - if @user.relatives.merge(current_organisation.users).empty?
+              li
+                em Aucun proche
+            - @user.relatives.merge(current_organisation.users).order(:birth_date).each do |relative|
+              li
+                => link_to relative.full_name, admin_organisation_user_path(current_organisation, relative)
+                = "(#{age(relative)})" if relative.birth_date
+          .text-right
+            = link_to "Ajouter un proche", new_admin_organisation_user_path(current_organisation, responsible_id: @user.id), class: "btn btn-outline-primary"
+
+  .col-md-6
+
+    - if policy_scope(Rdv).merge(@user.ongoing_rdvs(current_organisation)).any?
+      .card
+        .card-header Rendez-vous en cours (+/- 1 heure)
+        - ongoing_rdvs = policy_scope(Rdv).merge(@user.ongoing_rdvs(current_organisation)).order(starts_at: :asc)
+        = render "admin/rdvs/short_rdvs_list", user: @user, rdvs: ongoing_rdvs
+
+    .card
+      .card-header Prochains rendez-vous
+      - future_rdvs = policy_scope(Rdv).merge(@user.rdvs_future_without_ongoing(current_organisation)).order(starts_at: :asc).limit(10)
+      = render "admin/rdvs/short_rdvs_list", user: @user, rdvs: future_rdvs
+
+    .card
+      .card-header
+        .d-flex.justify-content-between
+          .mt-1
+            | Statuts
+            small.text-muted< sur #{@rdvs.count} RDV
+          - if @user.rdvs.count > 0
+            = link_to "Voir tous les rendez-vous de #{@user.full_name}", admin_organisation_rdvs_path(current_organisation, user_id: @user.id), class: "btn btn-outline-primary small"
+      .card-body
+        .row
+          = render "admin/rdvs/rdv_visibility"
+          .col-lg-6
+            - %i[seen excused revoked noshow].each do |temporal_status|
+              = render "stats/rdv_counter_with_link", \
+                temporal_status: temporal_status, \
+                count: @rdvs.status(temporal_status).count,
+                path: admin_organisation_rdvs_path(current_organisation, status: temporal_status, user_id: @user.id, breadcrumb_page: "user")
+          .col-lg-6
+            - %i[unknown_future unknown_past].each do |temporal_status|
+              = render "stats/rdv_counter_with_link", \
+                temporal_status: temporal_status, \
+                count: @rdvs.status(temporal_status).count,
+                path: admin_organisation_rdvs_path(current_organisation, status: temporal_status, user_id: @user.id, breadcrumb_page: "user")
+      .card-footer
+        .alert.alert-info.d-flex.align-items-center
+          .mr-3
+            i.fa.fa-info
+          | Les RDV sont supprimés au bout de 2 ans.
+
+.row.justify-content-center
+  .col-md-8
+    = render "admin/versions/resource_versions_row", policy_scope: :agent, resource: @user

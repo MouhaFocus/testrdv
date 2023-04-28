@@ -1,0 +1,29 @@
+- content_for(:menu_item) { "menu-absences" }
+= render "layouts/absences_change_banner"
+
+- content_for :title do
+  - if @absence.agent == current_agent
+    = t(".update_your_busy_time")
+  - else
+    = t(".update_busy_time_of", full_name: @absence.agent.full_name)
+
+- content_for :breadcrumb do
+  ol.breadcrumb.m-0
+    li.breadcrumb-item
+      = link_to admin_organisation_agent_absences_path(@absence.organisation, @absence.agent) do
+        - if @absence.agent == current_agent
+          = t(".your_busy_times")
+        - else
+          = t(".busy_time_of", full_name: @absence.agent.full_name)
+    li.breadcrumb-item.active
+      = truncate(@absence.title, length: 20)
+
+.row.justify-content-center
+  .col-md-6
+    .card
+      .card-body
+        = render "form", absence: @absence, agent: @agent
+
+.row.justify-content-center
+  .col-md-8
+    = render "admin/versions/resource_versions_row", policy_scope: :agent, resource: @absence

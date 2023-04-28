@@ -1,0 +1,54 @@
+- content_for(:menu_item) { "menu-absences" }
+- content_for(:menu_agent_select_path_helper_name) { "admin_organisation_agent_absences_path" }
+
+= render "layouts/absences_change_banner"
+
+- content_for :title do
+  - if current_agent == @agent
+    = t(".your_busy_times")
+  - else
+    = t(".busy_time_of", full_name: @agent.full_name_and_service)
+
+- content_for :breadcrumb do
+  = link_to t(".create_busy_time"), new_admin_organisation_agent_absence_path(current_organisation, @agent.id), class: "btn btn-outline-primary align-bottom"
+
+.card.pb-3
+  - if @display_tabs
+    ul.nav.nav-tabs.px-2.mt-2
+      li.nav-item
+        = active_link_to "En cours", admin_organisation_agent_absences_path(current_organisation, @agent.id), class: "nav-link", active: :exact
+      li.nav-item
+        = active_link_to "Passées", admin_organisation_agent_absences_path(current_organisation, @agent.id, current_tab: "expired"), class: "nav-link", active: :exact
+
+  - if @absences.any?
+    table.table
+      thead
+        tr
+          th Description
+          th Dates
+          - if @agent_organisations.count > 1
+            th Organisation
+          th Actions
+      tbody
+        = render @absences
+    .d-flex.justify-content-center
+      = paginate @absences, theme: "twitter-bootstrap-4"
+
+  - else
+    .row.justify-content-md-center.p-2.mt-3
+      .col-md-6.text-center.mb-2
+        p.mb-2.lead
+          - if current_agent == @agent
+            = t(".you_not_yet_create_busy_time")
+          - else
+            = t(".has_no_busy_time_yet", full_name: @agent.full_name)
+        p = t(".explanation_html")
+        span.fa-stack.fa-4x
+          i.fa.fa-circle.fa-stack-2x.text-primary
+          i.far.fa-calendar.fa-stack-1x.text-white
+  .text-center.py-2
+    = link_to new_admin_organisation_agent_absence_path(current_organisation, @agent.id), class: "btn btn-primary" do
+      - if @agent == current_agent
+        = t(".create_busy_time")
+      - else
+        = t(".create_busy_time_for", full_name: @agent.full_name)

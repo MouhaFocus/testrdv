@@ -1,0 +1,18 @@
+= territory_navigation(t(".title"))
+
+.row.justify-content-center
+  .col-md-6
+    .card
+      .card-body
+        h5.card-title= t(".card_title")
+        p.text-muted.font-14= t(".hint_1")
+
+        = simple_form_for current_territory, url: admin_territory_motif_categories_path(current_territory) do |f|
+          = render "model_errors", model: current_territory
+
+          h6= t("admin.territories.motif_categories.edit.title")
+          p.text-muted.font-14= t("admin.territories.motif_categories.edit.hint_1")
+          = f.association :motif_categories, collection: MotifCategory.all, label: "", as: :check_boxes
+
+          .text-right
+            = f.button :submit

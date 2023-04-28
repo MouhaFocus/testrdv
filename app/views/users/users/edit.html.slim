@@ -1,0 +1,24 @@
+.row.justify-content-md-center.pt-3
+  .col-md-6
+    .card
+      .card-body
+        h1.card-title = t(".my_informations")
+        = render "form", user: @user
+  .col-md-6
+    .card
+      .card-body
+        h2.card-title = t(".my_relatives")
+        ul.list-group.mb-2
+          - if @user.relatives.empty?
+            li.list-group-item
+              em = t(".no_relatives")
+          - @user.relatives.order(:birth_date).each do |relative|
+            li.list-group-item
+              .row
+                .col
+                  => relative.full_name
+                  = "(#{age(relative)})" if relative.birth_date
+                .col-auto.text-right
+                  = link_to t("admin.rdvs.show.update"), edit_relative_path(relative)
+        .text-right
+          = link_to t(".add_relative"), new_relative_path, class: "btn btn-outline-primary", data: { modal: true }

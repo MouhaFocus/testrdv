@@ -1,0 +1,100 @@
+body.authentication-bg {
+  background-size: cover;
+  background-position: center;
+  background: linear-gradient(to right, lighten($primary, 30%), lighten($secondary, 30%));
+}
+
+.agent-name{
+  font-size: 1.5rem;
+}
+
+.logout-icon {
+  width: 140px;
+}
+
+.auth-fluid {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: row;
+  align-items: stretch;
+  background-size: cover;
+
+  .auth-fluid-form-box {
+    max-width: 960px;
+    border-radius: 0;
+    z-index: 2;
+    padding: 3rem 2rem;
+    background-color: $white;
+    position: relative;
+    width: 100%;
+  }
+
+  .auth-fluid-left {
+    flex: 1;
+    position: relative;
+    color: $white;
+    background-color: $primary;
+
+    a {
+      color: $white;
+    }
+
+    body.agents & {
+      background-color: $blue;
+      color: $white;
+      .agent-profile {
+        border: 3px solid $white;
+        border-radius: 100%;
+      }
+    }
+  }
+}
+
+.toggle-password{
+  float: right;
+  margin-right: 1rem;
+  margin-top: -1.8rem;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+@include media-breakpoint-up(lg) {
+  .auth-fluid {
+    .auth-fluid-left {
+      padding: 6rem 3rem;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .auth-fluid {
+    display: block;
+
+    .auth-fluid-form-box {
+      max-width: 100%;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+  }
+}
+
+.france-connect-link {
+  .hover {
+    display: none;
+  }
+  &:hover {
+    .normal {
+      display: none;
+    }
+    .hover {
+      display: block;
+    }
+  }
+}
+.france-connect-details {
+  margin-top: 8px;
+  font-size: 13px;
+}

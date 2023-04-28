@@ -1,0 +1,66 @@
+- form_url = local_assigns[:rdv_wizard].present? ? users_rdv_wizard_step_path(step: 1, **@rdv_wizard.to_query.except(:rdv)) : users_informations_path
+- form_method = local_assigns[:rdv_wizard].present? ? "post" : "patch"
+- territories = Territory.joins(organisations: :user_profiles).where(user_profiles: { user_id: user.id }).to_a
+
+= simple_form_for user, url: form_url, method: form_method  do |f|
+  = render "model_errors", model: user
+  .form-row
+    .col-md-6= f.input :first_name, placeholder: "Prénom", disabled: user.logged_once_with_franceconnect?
+    .col-md-6= f.input :last_name, placeholder: "Nom"
+  .form-row
+    - unless current_user.only_invited?
+      .col-md-6= f.input :birth_name, placeholder: "Nom de naissance", disabled: user.logged_once_with_franceconnect?
+      .col-md-6= date_input(f, :birth_date, disabled: user.logged_once_with_franceconnect?)
+  - if user.logged_once_with_franceconnect?
+    .alert.alert-info.d-flex.align-items-center
+      .mr-3
+        .fa.fa-info
+      div= I18n.t("users.franceconnect_frozen_fields")
+  = f.input :phone_number, as: :tel, required: local_assigns[:rdv_wizard]&.motif&.phone?
+  - if current_user.only_invited?
+    = f.input :email, disabled: user.email.present? && !user.email_changed?, required: true
+  - if user.phone_number.present? && !user.phone_number_mobile?
+    .alert.alert-warning Vous ne recevrez pas de SMS avec ce numéro non-mobile
+  div.mb-2 Préférences de notifications
+  div= f.input :notify_by_email
+  div= f.input :notify_by_sms
+  - unless current_user.only_invited?
+    - address_value = local_assigns[:rdv_wizard].present? && user.address.nil? ? rdv_wizard.to_query[:where] : user.address
+    = f.input :address, input_html: {value: address_value, class: "places-js-container" }
+
+  - if territories.map(&:enable_address_details).any?
+    = f.input :address_details, input_html: {class: "places-js-container" }
+
+  = f.input :city_code, as: :hidden
+  = f.input :post_code, as: :hidden
+  = f.input :city_name, as: :hidden
+
+  - if local_assigns[:service].nil? || service.user_field_groups.include?(:social)
+    - if territories.map(&:enable_caisse_affiliation_field).any? || territories.map(&:enable_affiliation_number_field).any?
+      .form-row
+        - if territories.map(&:enable_caisse_affiliation_field).any?
+          .col-md-6= f.input :caisse_affiliation, collection: User.human_attribute_values(:caisse_affiliation)
+        - if territories.map(&:enable_affiliation_number_field).any?
+          .col-md-6= f.input :affiliation_number
+
+    - if territories.map(&:enable_family_situation_field).any? || territories.map(&:enable_number_of_children_field).any?
+      .form-row
+        - if territories.map(&:enable_family_situation_field).any?
+          .col-md-6= f.input :family_situation, collection: User.human_attribute_values(:family_situation)
+        - if territories.map(&:enable_number_of_children_field).any?
+          .col-md-6= f.input :number_of_children, input_html: { min: "0", max: "15", step: "any" }
+
+    - if local_assigns[:rdv_wizard]
+      ruby:
+        current_organisation = Motif.find(rdv_wizard.to_query[:motif_id]).organisation
+      - if current_organisation.territory.enable_logement_field
+        = f.input :logement, collection: User.human_attribute_values(:logement)
+    - elsif territories.map(&:enable_logement_field).any?
+      = f.input :logement, collection: User.human_attribute_values(:logement)
+
+  - if local_assigns[:rdv_wizard].present?
+    - rdv_wizard.to_query.each do |wizard_key, wizard_value|
+      = hidden_field_tag "rdv[#{wizard_key}]", wizard_value
+
+  .text-right
+    = f.button :submit, (local_assigns[:rdv_wizard].present? ? "Continuer" : "Modifier")

@@ -1,0 +1,143 @@
+input.form-control[type="color"],
+input.form-control[type="range"] {
+  min-height: 39px;
+}
+
+.custom-select.is-invalid, .form-control.is-invalid,.custom-select:invalid, .form-control:invalid,
+.custom-select.is-valid, .form-control.is-valid, .custom-select:valid,.form-control:valid {
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
+select.form-control {
+  &:not([size]):not([multiple]) {
+    height: $input-height;
+  }
+}
+
+select.form-control-sm {
+  &:not([size]):not([multiple]) {
+    height: $input-height-sm;
+  }
+}
+
+.form-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+}
+.form-row > .col,
+.form-row > [class*="col-"] {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.search-form-control {
+  min-width: 300px;
+}
+
+.ap-icon-pin{
+  display: none;
+}
+
+// for agents users form responsability type radio
+.form-check-inline .collection_radio_buttons {
+  margin-bottom: 0;
+}
+
+.merge-users-table {
+  label {
+    display: block;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  tr.identical {
+    td:not(:first-child) {
+      background-color: #DDFFEB;
+      color: #39C06E;
+    }
+
+    td:nth-child(2) > div{
+      position: relative;
+
+      &::before {
+        content: '=';
+        display: block;
+        position: absolute;
+        right: -27px;
+        background-color: #39C06E;
+        color: #FFF;
+        padding: 0 6px;
+        border-radius: 10px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  tr.different {
+    td:not(:first-child) {
+      background-color: #FEF9CB;
+      color: #FE8810;
+    }
+
+    td:nth-child(2) > div{
+      position: relative;
+
+      &::before {
+        content: '≠';
+        display: block;
+        position: absolute;
+        right: -27px;
+        background-color: #FE8810;
+        color: #FFF;
+        padding: 0 6px;
+        border-radius: 10px;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.card-overlay-spinner {
+  position: absolute;
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-collapsable-fields-wrapper {
+  position: relative;
+
+  &:not(.show) {
+    display: block !important;
+
+    &::before {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      content: "";
+      background: rgba(255,255,255,0.5);
+      z-index: 1000;
+    }
+  }
+}
+
+// allow using FontAwesome icons as buttons, without
+// having an ugly grey rectangle around the icon
+button.fa {
+  background: none;
+  border: none;
+  color: inherit;
+}

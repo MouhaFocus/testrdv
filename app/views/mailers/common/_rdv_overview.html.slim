@@ -1,0 +1,55 @@
+.overview
+  h3.aligncenter Récapitulatif
+  div.row-result
+    span.title Date :
+    span.float-right= l(rdv.starts_at, format: (rdv.home? ? :human_approx : :human))
+    .clear
+  div.row-result
+    - if rdv.collectif? && for_role == :user
+      span.title= "#{User.model_name.human} :"
+      span.float-right= @user.full_name
+    - else
+      span.title
+        = "Usager".pluralize(rdv.users_count)
+        |  :
+      span.float-right= rdv.rdvs_users.not_cancelled.map(&:full_name).sort.to_sentence
+    .clear
+  div.row-result
+    span.title Motif :
+    span.float-right
+      - if rdv.collectif? && rdv.name.present?
+        = "#{rdv.motif_name} : #{rdv.name}"
+      - else
+        = rdv.motif_name
+    .clear
+  div.row-result
+    span.title Service :
+    span.float-right= rdv.motif.service.name
+    .clear
+  - if rdv.follow_up?
+    div.row-result
+      span.title Référent :
+      span.float-right= rdv.agents.map(&:short_name).sort.to_sentence
+      .clear
+  div.row-result
+    span.title Durée :
+    span.float-right= "#{rdv.duration_in_min} minutes"
+    .clear
+  - if rdv.phone?
+    div.row-result
+      span.title Ceci est un rendez-vous téléphonique
+  - elsif rdv.home?
+    div.row-result
+      span.title Ceci est un rendez-vous à domicile à l'adresse :
+      div.alignright
+        = rdv.address_complete
+  - else
+    div.row-result
+      span.title Adresse :
+      span.float-right
+        = rdv.address_complete
+      .clear
+  - if rdv.motif.instruction_for_rdv.present? && for_role == :user
+    .div.row-result.no-border
+      span.title Informations supplémentaires :
+      = auto_link(simple_format(rdv.motif.instruction_for_rdv), html: { target: "_blank" })

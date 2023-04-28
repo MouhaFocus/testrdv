@@ -1,0 +1,75 @@
+ul.list-group.list-group-flush
+  li.list-group-item
+    .row
+      .col
+        i.fa.fa-check.fa-fw.mr-1.text-success
+        | Motif :&nbsp;
+        = rdv_wizard.motif.name
+      - unless rdv_wizard.invitation?
+        .col-auto
+          = link_to "modifier", path_to_motif_selection(rdv_wizard.params_to_selections)
+  - if rdv_wizard.motif.phone?
+    li.list-group-item
+      i.fa.fa-check.fa-fw.mr-1.text-success
+      | RDV téléphonique
+  - elsif rdv_wizard.motif.home?
+    li.list-group-item
+      i.fa.fa-check.fa-fw.mr-1.text-success
+      | RDV à domicile
+  - else
+    li.list-group-item
+      .row
+        .col
+          i.fa.fa-check.fa-fw.mr-1.text-success
+          | Lieu :&nbsp;
+          = rdv_wizard.creneau.lieu.full_name
+        - unless rdv_wizard.invitation?
+          .col-auto
+            = link_to "modifier", path_to_lieu_selection(rdv_wizard.params_to_selections)
+  li.list-group-item
+    .row
+      .col
+        i.fa.fa-check.fa-fw.mr-1.text-success
+        | Date du rendez-vous :&nbsp;
+        = rdv_starts_at_and_duration(rdv_wizard.rdv, :human)
+      - unless rdv_wizard.invitation?
+        .col-auto
+          = link_to "modifier", path_to_creneau_selection(rdv_wizard.params_to_selections)
+  - if rdv_wizard.is_a?(UserRdvWizard::Step3)
+    li.list-group-item
+      .row
+        .col
+          i.fa.fa-check.fa-fw.mr-1.text-success
+          | Usager :&nbsp;
+          - if !rdv_wizard.invitation?
+            = users_to_sentence(rdv_wizard.users)
+          - else
+            = current_user.full_name
+        - unless rdv_wizard.invitation?
+          .col-auto
+            = link_to "modifier", new_users_rdv_wizard_step_path(step: 2, **@rdv_wizard.to_query)
+    li.list-group-item
+      .row
+        .col
+          i.fa.fa-check.fa-fw.mr-1.text-success
+          | Informations de contact :&nbsp;
+      .row
+        .col.ml-3
+          span> ✉️ Email :
+          b>= current_user.email
+          span>= "(notifications par email #{current_user.notify_by_email? ? 'activées' :  'désactivées'})"
+      .row
+        .col.ml-3
+          span> 📞 Téléphone :
+          = user_notifiable_by_sms_text(current_user)
+        .col-auto
+          = link_to "modifier", new_users_rdv_wizard_step_path(step: 1, **@rdv_wizard.to_query)
+  - if @rdv_wizard.respond_to?(:prescripteur) && @rdv_wizard.prescripteur.present?
+    li.list-group-item
+      .row
+        .col
+          i.fa.fa-check.fa-fw.mr-1.text-success
+          | Prescripteur :&nbsp;
+          = @rdv_wizard.prescripteur.full_name
+        .col-auto
+          = link_to "modifier", prescripteur_new_prescripteur_path

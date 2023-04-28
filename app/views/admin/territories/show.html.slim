@@ -1,0 +1,74 @@
+= territory_navigation
+
+.row.mb-3
+  - if policy([:configuration, AgentTerritorialRole]).display?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to edit_admin_territory_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-location-dot>
+          | Territoire
+        p Configurer le territoire, département, structure
+
+  - if policy([:configuration, Agent]).display?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to admin_territory_agents_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-users>
+          | Agents
+        p Inviter des agents, affecter à des équipes
+
+  - if policy([:configuration, Team]).display?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to admin_territory_teams_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-users>
+          | Équipes
+        p Construire des équipes pour grouper des agents
+
+  - if policy([:configuration, WebhookEndpoint]).display?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to admin_territory_webhook_endpoints_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-network-wired>
+          | Webhook
+        p Interconnecter #{current_domain.name} avec vos systèmes.
+
+  - if policy([:configuration, Sector]).display?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to admin_territory_sectorization_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-table>
+          | Sectorisation
+        p Créer, importer, affecter vos secteurs géographiques.
+
+  - if policy([:configuration, current_territory]).display_user_fields_configuration?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to edit_admin_territory_user_fields_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-users>
+          | Fiches usagers
+        p Gérer les informations enregistrées sur les usagers
+
+  - if policy([:configuration, current_territory]).display_rdv_fields_configuration?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to edit_admin_territory_rdv_fields_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-calendar>
+          | Fiches RDV
+        p Gérer les informations enregistrées sur les rendez-vous
+
+  - if policy([:configuration, current_territory]).display_motif_fields_configuration?
+    .col.col-md-4.p-2.rounded.settings-box
+      = link_to edit_admin_territory_motif_fields_path(current_territory) do
+        h2.fw-bold.mb-0
+          i.fa.fa-calendar>
+          | Motifs
+        p Gérer les options de configuration des motifs
+
+  / Ce lien est la manière principale de sortir de la configuration pour retourner à l'écran métier, donc on le garde à la fin de la liste
+  .col.col-md-4.p-2.rounded.settings-box
+    = link_to admin_organisations_path do
+      h2.fw-bold.mb-0
+        i.fa.fa-home>
+        | Organisations
+      p Lister mes organisations.

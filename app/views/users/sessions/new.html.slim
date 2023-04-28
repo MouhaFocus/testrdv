@@ -1,0 +1,29 @@
+- content_for :title, "Connexion"
+
+.card
+  = render "users/rdv_wizard_steps/rdv_wizard_summary", rdv_wizard: @rdv_wizard if @rdv_wizard.present?
+
+  .card-body
+    = render "common/franceconnect_button"
+    .text-center.w-75.m-auto
+      p.text-muted.mb-4 Entrez votre email et votre mot de passe
+
+    = render "common/session_form", resource: resource, resource_name: resource_name
+
+    hr
+    .text-center
+      p.text-muted
+        | Vous n'avez pas de compte ?&nbsp;
+        = link_to new_registration_path(resource_name, params: params.permit(:lieu_id, :motif_id, :starts_at)) do
+          b Je m'inscris
+
+    / On évite généralement d'avoir de la logique spécifique au domain, mais ici il s'agit d'un feature flag temporaire,
+    / puisqu'on compte bientôt ouvrir cette fonctionnalité à tous les domaines
+    / On a aussi un feature flag pour l'expérimentation dans le Var en démo
+    - demo_var = @rdv_wizard&.motif&.organisation&.territory&.departement_number == "83" && current_domain.dns_domain_name.include?("demo")
+    - if @rdv_wizard && (current_domain == Domain::RDV_AIDE_NUMERIQUE || demo_var)
+      hr
+        .text-center
+          p.text-muted
+            = link_to prescripteur_start_path(@rdv_wizard.to_query) do
+              b Je suis un prescripteur qui oriente un bénéficiaire

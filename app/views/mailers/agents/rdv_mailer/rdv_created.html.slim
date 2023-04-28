@@ -1,0 +1,17 @@
+div
+  p Bonjour,
+  p
+    - date = relative_date(@rdv.starts_at)
+    - author = @author&.full_name
+    - if @rdv.collectif?
+      = t(".created_participation_at_date_by_user", date: date , author: author)
+    - else
+      = t(".created_at_date_by_user", date: date , author: author)
+
+    = render "mailers/common/rdv_overview", rdv: @rdv, for_role: :agent
+
+  p.aligncenter
+    = link_to "Voir sur #{domain.name}", admin_organisation_rdv_url(@rdv.organisation_id, @rdv.id),  class: "btn btn-primary"
+
+  br
+  = t("mailers.common.farewell_html", domain_name: domain.name)

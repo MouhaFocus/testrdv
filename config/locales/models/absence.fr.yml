@@ -1,0 +1,11 @@
+fr:
+  activerecord:
+    models:
+      absence: Absence
+    attributes:
+      absence:
+        title: Description
+        first_day: Commence le
+        end_day: Termine le
+        start_time: Commence à
+        end_time: Termine à

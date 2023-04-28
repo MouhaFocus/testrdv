@@ -1,0 +1,32 @@
+{:uriI"Çfile://app/assets/builds/charts.js.LICENSE.txt?type=text/plain&id=d6eabcfcb5526a7d5b295aa12b974d14a5ff4b90ac25d38c3556623f7814ce75:ET:load_pathI"app/assets/builds;T:filenameI",app/assets/builds/charts.js.LICENSE.txt;T:	nameI"charts.js.LICENSE;T:logical_pathI"charts.js.LICENSE.txt;T:content_typeI"text/plain;T:sourceI",/*!
+ * @kurkle/color v0.3.2
+ * https://github.com/kurkle/color#readme
+ * (c) 2023 Jukka Kurkela
+ * Released under the MIT License
+ */
+
+/*!
+ * Chart.js v4.2.1
+ * https://www.chartjs.org
+ * (c) 2023 Chart.js Contributors
+ * Released under the MIT License
+ */
+
+/*!
+ * Chartkick.js v5.0.1
+ * Create beautiful charts with one line of JavaScript
+ * https://github.com/ankane/chartkick.js
+ * MIT License
+ */
+
+/*!
+ * chartjs-adapter-date-fns v3.0.0
+ * https://www.chartjs.org
+ * (c) 2022 chartjs-adapter-date-fns Contributors
+ * Released under the MIT license
+ */
+;T:metadata{
+:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"4processors:type=text/plain&file_type=text/plain;TTI":file-digest://app/assets/builds/charts.js.LICENSE.txt;TTF:charsetI"
+utf-8;F:digest"%Ó"à-∆Í?®<sÈ◊êu3üVl>¨ú∆]M¢>ó:lengthi,:environment_versionI"1.0;T:dependencies_digest"%?k Ù<Ç⁄äWx{ é1Ω’;b£Lªé§0\J5èp¬É:idI"Ed6eabcfcb5526a7d5b295aa12b974d14a5ff4b90ac25d38c3556623f7814ce75;F

@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+    = stylesheet_link_tag "mail", media: "all"
+  body
+    = render "layouts/rdv_solidarites_instance_name"
+    table.body-wrap
+      tr.d-block align="center"
+        td.logo.d-block
+          = link_to root_url do
+            / using <img width=...> attribute because Outlook sometimes ignores the CSS
+            = image_tag domain.public_logo_path, style: "width: 200px; margin: auto;", width: "200", alt: "Le logo de #{domain.name}"
+        td.container
+          .content
+            table.main width="100%"
+              tr
+                td.content-wrap
+                  table width="100%"
+                    tbody
+                      = yield
+            .footer
+              table width="100%"
+                tr
+                  td.aligncenter.content-block
+                    = link_to mentions_legales_url do
+                      span> Mentions Légales

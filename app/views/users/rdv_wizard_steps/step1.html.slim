@@ -1,0 +1,11 @@
+= render "/users/rdv_wizard_steps/stepper", step_title: t(".title")
+
+.row.justify-content-center
+  .col-lg-7.col-md-10.col-sm-11
+    h3.text-center.mb-3 Vos informations
+    .card
+      = render "rdv_wizard_summary", rdv_wizard: @rdv_wizard
+      .card-body
+        = render "users/users/form", user: current_user, rdv_wizard: @rdv_wizard, service: @rdv_wizard.service
+        .col
+          = link_to "Revenir en arrière", prendre_rdv_path(@rdv_wizard.to_query), class: "btn btn-link"

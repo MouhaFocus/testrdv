@@ -1,0 +1,18 @@
+- content_for(:menu_item) { "menu-organisation" }
+
+- content_for :title do
+  | Modifier l'organisation
+
+.row.justify-content-center
+  .col-md-6
+    .card
+      .card-body
+        = simple_form_for [:admin, @organisation]  do |f|
+          = render "model_errors", model: @organisation
+          = f.input :name
+          = f.input :phone_number, placeholder: "04 65 71 12 34"
+          = f.input :website, placeholder: "https://rdv-solidarites.fr"
+          = f.input :email, placeholder: "contact@ma-mds.fr"
+          = f.input :horaires, placeholder: "Du lundi au vendredi de 9h à 17h, le samedi de 9h à 12h"
+          .text-right
+            = f.button :submit

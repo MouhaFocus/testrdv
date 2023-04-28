@@ -1,0 +1,7 @@
+fr:
+  activerecord:
+    models:
+      service: Service
+    attributes:
+      service:
+        short_name: Nom raccourci (SMS)

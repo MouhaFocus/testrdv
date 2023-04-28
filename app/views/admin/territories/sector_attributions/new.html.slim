@@ -1,0 +1,14 @@
+= territory_navigation(t(".title", name: @sector.name), [link_to("Sectorisation", admin_territory_sectorization_path(current_territory)), link_to("Secteurs", admin_territory_sectors_path(current_territory))])
+
+.row.justify-content-center
+  .col-md-6
+    .card[style="position: relative;"]
+      .card-overlay-spinner.js-spinner-overlay.d-none
+        .spinner.spinner-border
+      .card-body
+        = render "model_errors", model: @sector_attribution
+        = render "form", \
+          sector_attribution: @sector_attribution, \
+          sector: @sector, \
+          available_organisations: @available_organisations, \
+          available_agents: @available_agents

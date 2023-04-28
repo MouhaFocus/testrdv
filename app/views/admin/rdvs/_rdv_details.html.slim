@@ -1,0 +1,74 @@
+- if rdv.created_by_user?
+  p.card-text
+    i.fa.fa-fw.fa-at.text-primary-blue>
+    | RDV pris sur Internet
+
+.d-flex.card-text.mb-1
+  div.mr-1
+    i.fa.fa-fw.fa-info-circle.text-primary-blue>
+  div
+    = rdv.motif_name
+    = motif_badges(rdv.motif)
+    - if current_organisation.territory.enable_context_field
+      div
+        - if rdv.context.blank?
+          .text-muted = t(".empty_context")
+        - else
+          .text-muted Contexte :
+          .border-left.pl-2.mb-1= simple_format(rdv.context, {}, wrapper_tag: :span)
+
+- if rdv.phone?
+  p.card-text
+    i.fa.fa-fw.fa-phone.text-primary-blue>
+    | RDV téléphonique
+- else
+  .d-flex.card-text.mb-1
+    div.mr-1
+      i.fa.fa-fw.fa-map-marker.text-primary-blue>
+    p.card-text
+      - if rdv.home?
+        | RDV à domicile :
+        = human_location(rdv)
+      - elsif rdv.public_office?
+        = human_location(rdv)
+
+.d-flex.card-text
+  div.mr-1
+    i.fa.fa-fw.fa-user.text-primary-blue>
+  div
+    strong
+      => "Professionnel".pluralize(rdv.agents.size)
+    = agents_to_sentence(rdv.agents)
+
+- rdv.rdvs_users.select(&:prescripteur).each do |rdvs_user|
+  - prescripteur = rdvs_user.prescripteur
+  .d-flex.card-text.mt-1
+    div.mr-1
+      i.fa-solid.fa-user-plus.text-primary-blue
+    div
+      ' Rendez-vous pris par
+      a href="#prescripteur-explanation#{rdvs_user.id}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+        = prescripteur.full_name
+  .collapse.alert-info.p-2.m-2 id="prescripteur-explanation#{rdvs_user.id}"
+    p
+      ' La réservation a été faite par un prescripteur qui ne participera pas au rendez-vous (agent d'accueil, conseiller).
+    p
+      ' Ce rendez-vous a été pris sur un créneau ouvert au public.
+    p.mb-0
+      ' Si vous pensez qu'il y a eu une erreur lors de la prise de rendez-vous, vous pouvez contacter
+      strong => prescripteur.full_name
+      - if prescripteur.phone_number.present?
+        ' au
+        strong => phone_to(prescripteur.phone_number)
+        ' ou
+      ' à l'adresse
+      strong = mail_to(prescripteur.email)
+      | .
+
+- if rdv.public_office? && rdv.overlapping_plages_ouvertures?
+  div.my-3
+    .alert.alert-warning.mt-1.mb-0
+      | Conflit de lieu avec des plages d'ouvertures
+    .border-left.border-right.border-bottom.rounded.border-warning
+      ul.pl-3.py-2.mb-0
+        = render "admin/plage_ouvertures/overlapping_plage_ouvertures", model: rdv, display_agents: true

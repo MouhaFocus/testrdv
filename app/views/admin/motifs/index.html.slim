@@ -1,0 +1,75 @@
+- content_for(:menu_item) { "menu-motifs" }
+
+- content_for :title do
+  | Vos motifs
+
+- if current_agent_can?(:create, Motif)
+  - content_for :breadcrumb do
+    = link_to "Créer un motif", new_admin_organisation_motif_path(current_organisation), class:"btn btn-outline-primary"
+
+= simple_form_for "", url: admin_organisation_motifs_path(current_organisation), html: { method: :get, class: "form-inline" }, wrapper: :inline_form do |f|
+
+  .container-fluid.card
+
+    .m-3.d-flex.justify-content-end
+      - search = params[:search].blank? ? "d-none" : ""
+      div= link_to "Réinitialiser", admin_organisation_motifs_path(current_organisation), class: "btn btn-link #{search}"
+      = f.input :search, placeholder: "ex. Être appelé par la MDS", label: false, input_html: { autocomplete: "off", class: "search-form-control", value: params[:search] }, required: false
+      = f.button :submit, "Rechercher"
+    table.table
+      thead
+        tr
+          th
+          th= Motif.human_attribute_name("name")
+          th
+            div
+              = Motif.human_attribute_name("bookable_publicly")
+            div
+              - options = options_for_select(["En ligne", "Hors ligne"], params[:online_filter])
+              = select_tag("online_filter", options, include_blank: "Tous", class: "js-submit-on-change select2-input")
+          - if @display_sectorisation_level
+            th= Motif.human_attribute_name("sectorisation_level")
+          th
+            div
+              = Motif.human_attribute_name("service")
+            div
+              - available_services = Service.all_for_territory(current_territory)
+              - options = options_from_collection_for_select(available_services.sort, :id, :short_name, params[:service_filter])
+              = select_tag("service_filter", options, include_blank: "Tous", class: "js-submit-on-change select2-input")
+          th
+            div
+              = Motif.human_attribute_name("location_type")
+            div
+              - options = options_for_select(Motif.location_types.map{|l| [Motif.human_attribute_value(:location_type, l[0]), l[1]] }, params[:location_type_filter])
+              = select_tag("location_type_filter", options, include_blank: "Tous", class: "js-submit-on-change select2-input")
+          th= Motif.human_attribute_name(:default_duration)
+          - if current_agent_can?(:edit, Motif) || current_agent_can?(:destroy, Motif)
+            th Actions
+      tbody
+        - if @motifs.any?
+          = render @motifs
+          .d-flex.justify-content-center
+            = paginate @motifs, theme: "twitter-bootstrap-4"
+        - else
+          tr
+            td(colspan=6)
+              .row.justify-content-md-center
+                .col-md-6.text-center.my-5
+                  - if @unfiltered_motifs.any?
+                    p.mb-2.lead Aucun motif ne correspond à votre filtre
+                  - else
+                    p.mb-2.lead Vous n'avez pas encore créé de motif.
+                    p Les motifs sont les types de RDV que vous proposez dans votre organisation. Chaque motif a des options indépendantes : durée, format (à domicile, par téléphone, sur place), prise de RDV en ligne activée etc...
+                  span.fa-stack.fa-4x
+                    i.fa.fa-circle.fa-stack-2x.text-primary
+                    i.far.fa-calendar.fa-stack-1x.text-white
+                  - if current_agent_can?(:create, Motif)
+                    .text-center.m-3
+                      = link_to "Créer un motif", new_admin_organisation_motif_path(current_organisation), class: "btn btn-primary"
+
+    - if @motifs.any?
+      .d-flex.justify-content-center
+        = paginate @motifs, theme: "twitter-bootstrap-4"
+      - if current_agent_can?(:create, Motif)
+        .text-center.m-3
+          = link_to "Créer un motif", new_admin_organisation_motif_path(current_organisation), class: "btn btn-primary"

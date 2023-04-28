@@ -1,0 +1,10 @@
+fr:
+  admin:
+    versions:
+      title: Historique des changements
+      versions:
+        date: Date
+        author: Auteur
+        attribute: Attribut
+        before: Avant
+        after: Après

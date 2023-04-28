@@ -1,0 +1,34 @@
+fr:
+  activerecord:
+    models:
+      agent_role: Rôle agent
+    attributes:
+      agent_role:
+        level: Niveau de permissions
+      agent_role/levels:
+        none: Inaccessible
+        basic: Agent
+        admin: Admin
+      agent_role/levels/explanation:
+        basic: "<i class='far fa-user'></i> Agent<br><ul><li>Peut consulter et modifier son agenda et celui des agents de son service</li><li>Service secrétariat: peut consulter et modifier les agendas de tous les agents de l'organisation</li></ul>"
+        admin: <i class='fa fa-user-cog'></i> Admin<br><ul><li>Peut consulter et modifier l'agenda de tous les agents de l'organisation</li><li>Peut créer, modifier et supprimer des lieux, des motifs et des agents</li><li>Peut accéder aux statistiques de l'organisation</li></ul>
+    warnings:
+      models:
+        agent_role:
+          different_service: "Attention : le service demandé (%{service}) ne correspond pas au service déjà connu de cet agent (%{agent_service})."
+    notice:
+      models:
+        agent_role:
+          existing: L’agent %{email} est déjà présent sur RDV-solidarités et a rejoint votre organisation.
+          invited: L’agent %{email} a été invité à rejoindre votre organisation.
+    errors:
+      models:
+        agent_role:
+          attributes:
+            agent:
+              taken_existing: L’agent %{email} fait déjà partie de votre organisation.
+              taken_invited: L’agent %{email} a déjà été invité à rejoindre votre organisation.
+        agent/roles:
+          attributes:
+            agent:
+              format: "%{message}"

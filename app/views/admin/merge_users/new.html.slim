@@ -1,0 +1,87 @@
+- content_for(:menu_item) { "menu-users" }
+
+- content_for :title do
+  | Fusionner deux usagers
+
+- content_for :breadcrumb do
+  ol.breadcrumb.m-0
+    li.breadcrumb-item
+      = link_to "Vos usagers", admin_organisation_users_path(current_organisation)
+    li.breadcrumb-item.active Fusionner
+
+= simple_form_for [:admin, @merge_users_form], url: admin_organisation_merge_users_path(current_organisation), method: "POST" do |f|
+  = render "model_errors", model: @merge_users_form
+  .card
+    table.table.table-bordered.merge-users-table[style="table-layout:fixed"]
+      tr.text-center
+        th[style="width:20%"]
+        th[style="width:40%"]
+          i.fa.fa-user>
+          | Usager A
+        th[style="width:40%"]
+          i.fa.fa-user>
+          | Usager B
+      tr.text-center
+        td
+        td= render "user_selection", user: @merge_users_form.user1, attribute: "user1_id", f: f, other_user_id: @merge_users_form.user2&.id
+        td= render "user_selection", user: @merge_users_form.user2, attribute: "user2_id", f: f, other_user_id: @merge_users_form.user1&.id
+
+      - @merge_users_form.available_attributes.each do |attribute|
+        - value1 = user_merge_attribute_value(@merge_users_form.user1, attribute) if @merge_users_form.user1
+        - value2 = user_merge_attribute_value(@merge_users_form.user2, attribute) if @merge_users_form.user2
+        tr class=@merge_users_form.attribute_comparison(attribute)
+          td= User.human_attribute_name(attribute)
+
+          td
+            - if @merge_users_form.user1
+              div.pr-2
+                label.d-flex.justify-content-end for="merge_users_form_#{attribute}_1"
+                  - if @merge_users_form.user1.frozen_by_franceconnect?(attribute)
+                    div
+                      = value1
+                    = f.input attribute, as: :hidden, input_html: { value: "1" }
+                  - elsif @merge_users_form.user2.present? && @merge_users_form.user2.frozen_by_franceconnect?(attribute)
+                    del = value1
+                  - else
+                    - if value1&.present?
+                      div= value1
+                    - else
+                      i.text-muted N/A
+                    - if @merge_users_form.attribute_comparison(attribute) == :different
+                      span.ml-2= f.radio_button attribute, "1", required: true
+
+          td.text-left.pl-3
+            - if @merge_users_form.user2
+              div.pr-2
+                label.d-flex.justify-content-start for="merge_users_form_#{attribute}_2"
+                  - if @merge_users_form.user2.frozen_by_franceconnect?(attribute)
+                    div
+                      = value2
+                    = f.input attribute, as: :hidden, input_html: { value: "2" }
+                  - elsif @merge_users_form.user1.present? && @merge_users_form.user1.frozen_by_franceconnect?(attribute)
+                    del = value2
+
+                  - else
+                    - if @merge_users_form.attribute_comparison(attribute) == :different
+                      span.mr-2= f.radio_button attribute, "2", required: true
+                    - if value2&.present?
+                      div= value2
+                    - else
+                      i.text-muted N/A
+      tr
+        td= "🔒 RDVs"
+        td.text-right= render "user_rdvs", user: @merge_users_form.user1
+        td.text-left= render "user_rdvs", user: @merge_users_form.user2
+
+      - unless @merge_users_form.user1&.relative? && @merge_users_form.user2&.relative?
+        tr
+          td= "🔒 Agents Responsables"
+          td.text-right= render "user_agents", user: @merge_users_form.user1
+          td.text-left= render "user_agents", user: @merge_users_form.user2
+        tr
+          td= "🔒 Proches"
+          td.text-right= render "user_relatives", user: @merge_users_form.user1
+          td.text-left= render "user_relatives", user: @merge_users_form.user2
+    .row.pr-3.pb-3
+      .col.text-right
+        = f.button :submit, value: "Fusionner", data: { confirm: "Êtes-vous certain(e) de vouloir fusionner ces deux usagers ? Cette action est définitive" }

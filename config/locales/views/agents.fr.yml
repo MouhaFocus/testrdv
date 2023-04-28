@@ -1,0 +1,20 @@
+fr:
+  agents:
+    calendar_sync:
+      show:
+        title: Synchronisation vers un agenda externe
+    outlook_sync:
+      show:
+        title: Connexion à votre compte Outlook
+    webcal_sync:
+      show:
+        title: Lien de synchronisation
+    preferences:
+      show:
+        title: Préférences de notifications
+        rdv_notifications_header: "Recevoir un email de notification pour mes rendez-vous :"
+        plage_ouverture_notifications_header: "Recevoir un email de notification pour mes plages d'ouverture :"
+        absence_notifications_header: "Recevoir un email de notification pour mes indisponibilités :"
+        technical_email_explanation: Les emails de notification sont envoyés avec un fichier .ics qui vous permet de synchroniser votre calendrier (Outlook, zimbra, etc.) avec RDV Solidarités.
+      update:
+        done: Préférences de notifications mises à jour.

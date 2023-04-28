@@ -1,0 +1,10 @@
+table.table.table-borderless.table-sm
+  thead
+    tr
+      th=t(".date")
+      th=t(".author")
+      th=t(".attribute")
+      th=t(".before")
+      th=t(".after")
+  tbody
+    = render partial: "admin/versions/version", collection: versions

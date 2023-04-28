@@ -1,0 +1,31 @@
+.card {
+  border: none;
+  box-shadow: $shadow;
+  margin-bottom: $grid-gutter-width;
+}
+
+// Card title / Card Header
+.card-title,
+.card-header {
+  margin-top: 0;
+}
+.card-title{
+  color: $blue;
+  font-size: 1.5rem;
+}
+
+.card-subtitle{
+  color: $blue;
+  font-size: 1.25rem;
+}
+
+.card-hoverable {
+  border: 1px solid transparent;
+  &:hover {
+    border-color: $blue;
+  }
+}
+
+.light-gray-card {
+  background-color: #F6F6F6;
+}

@@ -1,0 +1,11 @@
+div
+  p Bonjour,
+  p
+    - if @rdv.home?
+      | Votre RDV du #{l(@rdv.starts_at, format: :human_approx)} a été confirmé.
+    - else
+      | Votre RDV du #{l(@rdv.starts_at, format: :human)} a été confirmé.
+
+  = render "mailers/common/rdv_overview", rdv: @rdv, for_role: :user
+  = render "mailers/common/rdv_cancellable", rdv: @rdv, token: @token
+  = t("mailers.common.farewell_html", domain_name: domain.name)

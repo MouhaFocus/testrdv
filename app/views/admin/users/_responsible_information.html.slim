@@ -1,0 +1,31 @@
+ul.list-unstyled.mb-5
+  li.mb-2= object_attribute_tag(user, :first_name)
+  li.mb-2= object_attribute_tag(user, :last_name)
+  li.mb-2= object_attribute_tag(user, :birth_name)
+  li.mb-2= object_attribute_tag(user, :birth_date, birth_date_and_age(user))
+  li.mb-2= object_attribute_tag(user, :address)
+  li.mb-2= object_attribute_tag(user, :email, clickable_user_email(user))
+  li.mb-2= object_attribute_tag(user, :notify_by_email, notify_by_email_description(user))
+  li.mb-2
+    = object_attribute_tag(user, :phone_number, clickable_user_phone_number(user))
+    - if user.phone_number.present? && DuplicateUsersFinderService.find_duplicate_based_on_phone_number(user, current_organisation).present?
+      .alert.alert-warning.mt-1
+        span> ⚠️ D'autres usagers utilisent ce numéro de téléphone.
+        = link_to "voir la liste", admin_organisation_users_path(current_organisation, "search": user.phone_number)
+
+  li.mb-2= object_attribute_tag(user, :notify_by_sms, notify_by_sms_description(user))
+  - if user.pending_reconfirmation?
+    .text-muted.mb-2
+      | En attente de confirmation pour #{user.unconfirmed_email}
+
+  - if current_territory.enable_notes_field?
+    li.mb-2= object_attribute_tag(user, :notes, formatted_user_notes(user))
+
+- if current_territory.any_social_field_enabled?
+  h4.card-title.mb-3 Informations sociales
+ul.list-unstyled.mb-5
+  - Territory::SOCIAL_FIELD_TOGGLES.each do |toggle, field_name|
+    - if current_territory.attributes[toggle.to_s]
+      li.mb-2= object_attribute_tag(user, field_name)
+  - if current_territory.enable_logement_field
+    li.mb-2= object_attribute_tag(user, :logement)

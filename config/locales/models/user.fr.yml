@@ -1,0 +1,53 @@
+fr:
+  activerecord:
+    models:
+      user:
+        one: Usager
+        other: Usagers
+    attributes:
+      user:
+        organisation: Organisation
+        caisse_affiliation : Caisse d'affiliation
+        affiliation_number: Numéro d'allocataire
+        family_situation: Situation familiale
+        number_of_children: Nombre d'enfants
+        address_details: Complément d'adresse
+        case_number: Numéro de dossier
+        responsability_type: Type d'usager
+        notify_by_sms: "Accepte les notifications par SMS"
+        notify_by_email: "Accepte les notifications par email"
+        created_through: "Origine du compte"
+        notes: Remarques
+      user/logements:
+        sdf: Sans domicile fixe
+        heberge: Hébergé
+        locataire: Locataire
+        en_accession_propriete: En accession à la propriété
+        proprietaire: Propriétaire
+        autre: Autre
+      logement: Logement
+      user/caisse_affiliations:
+        aucune: Aucune
+        caf: CAF
+        msa: MSA
+      user/family_situations:
+        single: Célibataire
+        in_a_relationship: En couple
+        divorced: Divorcé
+      user/responsability_types:
+        responsible: "Responsable"
+        relative: "Proche"
+    errors:
+      models:
+        user:
+          attributes:
+            first_name:
+              franceconnect_frozen_field_cannot_change: Le prénom ne peut-être changé car il a été certifié par FranceConnect
+            birth_name:
+              franceconnect_frozen_field_cannot_change: Le nom de naissance ne peut-être changé car il a été certifié par FranceConnect
+            birth_date:
+              franceconnect_frozen_field_cannot_change: La date de naissance ne peut-être changée car elle a été certifiée par FranceConnect
+  simple_form:
+    hints:
+      user:
+        phone_number: Saisissez un numéro à 10 chiffres de France métropole ou d’outre-mer, ou bien un numéro international avec le préfixe du pays.

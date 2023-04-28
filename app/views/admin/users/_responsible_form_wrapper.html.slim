@@ -1,0 +1,8 @@
+= f.simple_fields_for \
+  :responsible, \
+  include_id: user_type_key == :relative_existing \
+do |sub_form|
+
+  = render "responsible_form_fields", \
+    f: sub_form, \
+    input_opts: input_opts

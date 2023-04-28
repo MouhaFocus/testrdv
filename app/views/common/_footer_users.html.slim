@@ -1,0 +1,38 @@
+.container
+  .row
+    .col-12.col-md
+      div
+        = link_to image_tag(current_domain.dark_logo_path, size: "250x80", alt: current_domain.name), root_path, title: "aller à l'accueil #{current_domain.name}"
+        ul.list-unstyled
+          li.mb-2
+            - if current_domain.default?
+              span> Un service fourni par
+              = link_to("Senegal Numérique SA", "https://senegalnumeriquesa.sn/", class: "inline")
+             
+            - else
+              span
+              = "#{current_domain.name} est géré par #{Domain::RDV_SOLIDARITES.name}, un service fourni par "
+              = link_to("l'Agence Nationale de la Cohésion des Territoires", "https://agence-cohesion-territoires.gouv.fr", class: "inline")
+              = "."
+              = link_to "En savoir plus", domaines_path
+          
+          
+    .col-12.col-md
+      h2 À propos
+      ul.list-unstyled
+        li.mb-1 = link_to "Contact", contact_path, class: "footer-links"
+        - if current_domain == Domain::RDV_SOLIDARITES
+          li.mb-1 = link_to "Les solidarités dans votre département", mds_path
+        li.mb-1 = link_to "Espace professionnel", presentation_agent_path
+        li.mb-1 = link_to "Statistiques", stats_path
+    
+    
+    .col-12.col-md
+      h2 Informations légales
+      ul.list-unstyled
+        li.mb-1 = link_to mentions_legales_path do
+          span> Mentions Légales
+        li.mb-1 = link_to cgu_path do
+          span> C.G.U.
+        li.mb-1 = link_to politique_de_confidentialite_path do
+          span> Politique de confidentialité
